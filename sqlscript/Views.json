@@ -2,12 +2,12 @@
 	"name": "Views",
 	"properties": {
 		"content": {
-			"query": "",
+			"query": "--VIEWS\nCREATE VIEW REVENUE_VIEW AS\nSELECT *\nFROM OPENROWSET(\n    BULK 'revenue',\n    DATA_SOURCE = 'MyDataLake',\n    FORMAT = 'CSV',\n    PARSER_VERSION='2.0',\n    HEADER_ROW=TRUE\n) as query;\n\n\nselect * from revenue_view;",
 			"metadata": {
 				"language": "sql"
 			},
 			"currentConnection": {
-				"databaseName": "master",
+				"databaseName": "sambhav-serverless",
 				"poolName": "Built-in"
 			},
 			"resultLimit": 5000
