@@ -1,0 +1,17 @@
+{
+	"name": "openrowset",
+	"properties": {
+		"content": {
+			"query": "-- -- OPENROWSET\n-- OPENROWSET in Azure is primarily used in Synapse Analytics’ serverless SQL pool to query external data directly from Azure Storage (like Blob or Data Lake)\n--  without loading it into a dedicated SQL table. It’s not supported in dedicated SQL pools.\n\n\n-- CREDENTIAL\n-- MANAGED IDENTITY \n\n\nCREATE MASTER KEY ENCRYPTION BY PASSWORD='password#6787'\n\n-- Create a database scoped credential using Managed Identity\nCREATE DATABASE SCOPED CREDENTIAL sambhavcreds\nWITH IDENTITY = 'Managed Identity';\n\n-- Then, you bind this credential to an external data source:\n\n-- Create external data source pointing to your storage\nCREATE EXTERNAL DATA SOURCE MyDataLake\nWITH (\n    LOCATION = 'https://sambhavdatalake.dfs.core.windows.net/raw',\n    CREDENTIAL = sambhavcreds\n);\n\n-- CREATE EXTERNAL FILE FORMAT\n\n-- Example for Parquet\n-- CREATE EXTERNAL FILE FORMAT ParquetFileFormat\n-- WITH (\n--     FORMAT_TYPE = PARQUET\n-- );\n\n-- Example for CSV\nCREATE EXTERNAL FILE FORMAT CsvFileFormat\nWITH (\n    FORMAT_TYPE = DELIMITEDTEXT,\n    FORMAT_OPTIONS (\n        FIELD_TERMINATOR = ',',\n        STRING_DELIMITER = '\"',\n        FIRST_ROW = 2\n    )\n);\n\n-- Example for JSON\n-- CREATE EXTERNAL FILE FORMAT JsonFileFormat\n-- WITH (\n--     FORMAT_TYPE = JSON\n-- );\n\n\nSELECT *\nFROM OPENROWSET(\n    BULK 'revenue',\n    DATA_SOURCE = 'MyDataLake',\n    FORMAT = 'CSV',\n    PARSER_VERSION='2.0',\n    HEADER_ROW=TRUE\n) as query;\n\n\n\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "sambhav-serverless",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

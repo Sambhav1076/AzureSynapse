@@ -1,0 +1,17 @@
+{
+	"name": "cetas",
+	"properties": {
+		"content": {
+			"query": "-- CREATE EXTERNAL TABLE AS SELECT\n\nCREATE EXTERNAL TABLE revenue_ctas\nWITH\n(\n    LOCATION='ctas_enriched',\n    DATA_SOURCE = MyDataLake,\n    FILE_FORMAT=parquet_ff\n)\nAS SELECT *\nFROM OPENROWSET(\n    BULK 'revenue',\n    DATA_SOURCE = 'MyDataLake',\n    FORMAT = 'CSV',\n    PARSER_VERSION='2.0',\n    HEADER_ROW=TRUE\n) as query;\n\n\nCREATE EXTERNAL FILE FORMAT parquet_ff\nWITH (\n    FORMAT_TYPE = PARQUET,\n    DATA_COMPRESSION = 'org.apache.hadoop.io.compress.SnappyCodec'\n);\n\n\nALTER DATABASE [sambhav-serverless]\nCOLLATE Latin1_General_100_CI_AI_SC_UTF8;\n\n\nselect * from revenue_ctas;\n\n-- How CETAS Works\n-- You run a SELECT query against your source data (could be external files, views, or other tables).\n\n-- Synapse executes the query and writes the result set into files in the specified Azure Data Lake Storage (ADLS Gen2) location.\n\n-- At the same time, Synapse creates an external table definition that points to those files.\n\n-- You can then query the external table directly, without re‑running the original SELECT.\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "sambhav-serverless",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

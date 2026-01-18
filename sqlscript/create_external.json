@@ -1,0 +1,17 @@
+{
+	"name": "create_external",
+	"properties": {
+		"content": {
+			"query": "-- External Datasource\n-- External file format\n-- location\n\nCREATE EXTERNAL FILE FORMAT CsvFileFormat\nWITH (\n    FORMAT_TYPE = DELIMITEDTEXT,\n    FORMAT_OPTIONS (\n        FIELD_TERMINATOR = ',',\n        STRING_DELIMITER = '\"',\n        FIRST_ROW = 2\n    )\n);\n\nCREATE EXTERNAL TABLE REVENUE_EXT_TABLE\n(\n    Region VARCHAR(2000),\n    Country VARCHAR(2000),\n    [Sales Reps] VARCHAR(2000),\n    [First Name] VARCHAR(2000),\n    [Last Name] VARCHAR(2000),\n    Gender VARCHAR(2000),\n    Age VARCHAR(2000),\n    [Rank Levels] VARCHAR(2000),\n    Rank VARCHAR(2000),\n    Products VARCHAR(2000),\n    Years INT,\n    Quarter VARCHAR(2000),\n    Month INT,\n    [Revenue USD] VARCHAR(2000)\n)\nWITH (\n    LOCATION = 'revenue',\n    DATA_SOURCE = MyDataLake,\n    FILE_FORMAT = CsvFileFormat\n);\n\nselect * from REVENUE_EXT_TABLE;\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "sambhav-serverless",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
