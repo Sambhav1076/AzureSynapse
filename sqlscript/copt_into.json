@@ -1,0 +1,17 @@
+{
+	"name": "copt_into",
+	"properties": {
+		"content": {
+			"query": "select * from copy_into_table;\n\ncopy into copy_into_table(\n\n    Dealer_id 1,\n    Model_id 2,\n    Branch_id 3,\n    Date_id 4,\n    Units_Sold  5, \n    revenue 6\n\n)\nfrom 'https://sambhavdatalake.dfs.core.windows.net/raw/automobile/'\nwith \n(\n\n    FILE_FORMAT = CsvFileFormat,\n    CREDENTIAL=(IDENTITY='Managed Identity')\n)\n\n\n-- Create a database scoped credential using Managed Identity\nCREATE DATABASE SCOPED CREDENTIAL sambhavcreds\nWITH IDENTITY = 'Managed Identity';\n\n-- Then, you bind this credential to an external data source:\n\n-- Create external data source pointing to your storage\nCREATE EXTERNAL DATA SOURCE MyDataLake\nWITH (\n    LOCATION = 'https://sambhavdatalake.dfs.core.windows.net/raw',\n    CREDENTIAL = sambhavcreds\n);\n\nCREATE EXTERNAL FILE FORMAT CsvFileFormat\nWITH (\n    FORMAT_TYPE = DELIMITEDTEXT,\n    FORMAT_OPTIONS (\n        FIELD_TERMINATOR = ',',\n        STRING_DELIMITER = '\"',\n        FIRST_ROW = 2\n    )\n);\n\ndrop table  iris_data;\nCREATE TABLE iris_data (\n    id float,  -- Assuming '#' is a row number or unique identifier\n    sepal_length FLOAT,\n    sepal_width FLOAT,\n    petal_length FLOAT,\n    petal_width FLOAT,\n    variety VARCHAR(50)  -- Typically values like 'Setosa', 'Versicolor', 'Virginica'\n)\nWITH(\n    DISTRIBUTION=ROUND_ROBIN\n)\n\ncopy into iris_data(\n    id ,\n    sepal_length ,\n    sepal_width ,\n    petal_length ,\n    petal_width,\n    variety \n)\nfrom 'https://sambhavdatalake.dfs.core.windows.net/raw/automobile/'\nwith \n(\n\n    FILE_TYPE='PARQUET',\n    CREDENTIAL=(IDENTITY='Managed Identity')\n)\n\n\n\nCREATE TABLE iris_data (\n    id FLOAT,\n    sepal_length FLOAT,\n    sepal_width FLOAT,\n    petal_length FLOAT,\n    petal_width FLOAT,\n    variety VARCHAR(50)\n);\n\n\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "sambhavdedicatedpool",
+				"poolName": "sambhavdedicatedpool"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
