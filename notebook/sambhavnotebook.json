@@ -18,7 +18,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "1143396f-3487-4b32-839e-793dc870f329"
+				"spark.autotune.trackingId": "9c395b04-6fd4-4649-b529-b848f23bcad2"
 			}
 		},
 		"metadata": {
@@ -76,9 +76,17 @@
 			{
 				"cell_type": "code",
 				"source": [
-					""
+					"spark.sql(\"select * from bankdata.stage\").show()"
 				],
-				"execution_count": 6
+				"execution_count": 2
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"df4=spark.sql(\"select Bank, State,count(`Assets ($mil.)`) as cnt from bankdata.stage group by Bank, State\")\n",
+					"df4.write.mode(\"overwrite\").csv(\"abfss://raw@sambhavdatalake.dfs.core.windows.net/bankdatafiles/output/\")"
+				],
+				"execution_count": 9
 			}
 		]
 	}
