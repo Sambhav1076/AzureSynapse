@@ -18,7 +18,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "9c395b04-6fd4-4649-b529-b848f23bcad2"
+				"spark.autotune.trackingId": "64c734af-2926-433c-9e9e-493996564bc4"
 			}
 		},
 		"metadata": {
@@ -87,6 +87,17 @@
 					"df4.write.mode(\"overwrite\").csv(\"abfss://raw@sambhavdatalake.dfs.core.windows.net/bankdatafiles/output/\")"
 				],
 				"execution_count": 9
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"# df5=spark.read.csv(\"abfss://raw@sambhavdatalake.dfs.core.windows.net/bankdatafiles/output/part-00000-5f82ba8e-27c4-4ec5-900d-bb9372d770e3-c000.csv\")\n",
+					"df5 = spark.read.option(\"header\", \"false\") \\\n",
+					"               .option(\"inferSchema\", \"true\") \\\n",
+					"               .csv(\"abfss://raw@sambhavdatalake.dfs.core.windows.net/bankdatafiles/output/part-00000-5f82ba8e-27c4-4ec5-900d-bb9372d770e3-c000.csv\")\n",
+					"df5.show()"
+				],
+				"execution_count": 11
 			}
 		]
 	}
